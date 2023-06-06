@@ -13,4 +13,6 @@ sp = spotipy.Spotify(
 )
 
 current_user = sp.current_user()
-print(current_user)
+assert current_user is not None
+search_results = sp.search(q="Uptown Funk", type="track", limit=10)
+print(search_results["tracks"]["items"][0])
