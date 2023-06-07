@@ -51,8 +51,8 @@ def get_playlist(prompt, count=8):
     return playlist
 
 
-songs = get_playlist("epic songs", 4)
-print(songs)
+playlist = get_playlist("epic songs", 4)
+print(playlist)
 
 sp = spotipy.Spotify(
     auth_manager=spotipy.SpotifyOAuth(
@@ -65,10 +65,14 @@ sp = spotipy.Spotify(
 
 current_user = sp.current_user()
 
+track_ids = []
 assert current_user is not None
 
-# search_results = sp.search(q="Uptown Funk", type="track", limit=10)
-# tracks = search_results["tracks"]["items"][0]["id"]
+for item in playlist:
+    artist, song = item["artist"], item["song"]
+    query = f"{song} {artist}"
+    search_results = sp.search(q=query, type="track", limit=10)
+    track_ids.append(search_results["tracks"]["items"][0]["id"])
 
 # created_playlist = sp.user_playlist_create(
 #     current_user["id"], public=False, name="TESTIN PLAYLIST"
