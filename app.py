@@ -57,7 +57,7 @@ def get_playlist(prompt, count=8):
     return playlist
 
 
-playlist = get_playlist("epic songs", 4)
+playlist = get_playlist(args.p, 4)
 print(playlist)
 
 sp = spotipy.Spotify(
