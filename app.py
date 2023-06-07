@@ -47,7 +47,7 @@ def get_playlist(prompt, count=8):
         messages=messages, model="gpt-3.5-turbo", max_tokens=400
     )
 
-    playlist = json.loads(["choices"][0]["message"]["content"])
+    playlist = json.loads(res["choices"][0]["message"]["content"])
     return playlist
 
 
@@ -57,7 +57,7 @@ print(songs)
 sp = spotipy.Spotify(
     auth_manager=spotipy.SpotifyOAuth(
         client_id=config["SPOTIFY_CLIENT_ID"],
-        client_secret=["SPOTIFY_CLIENT_SECRET"],
+        client_secret=config["SPOTIFY_CLIENT_SECRET"],
         redirect_uri="http://localhost:9999",
         scope="playlist-modify-private",
     )
