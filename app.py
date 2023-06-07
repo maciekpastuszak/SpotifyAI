@@ -10,6 +10,9 @@ openai.api_key = config["OPENAI_API_KEY"]
 
 parser = argparse.ArgumentParser(description="Simple command line song utility")
 parser.add_argument("-p", type=str, help="The prompt to describe the playlist")
+parser.add_argument(
+    "-n", type=int, default=8, help="The number of songs to add to the playlist"
+)
 
 args = parser.parse_args()
 
@@ -57,7 +60,7 @@ def get_playlist(prompt, count=8):
     return playlist
 
 
-playlist = get_playlist(args.p, 4)
+playlist = get_playlist(args.p, args.n)
 print(playlist)
 
 sp = spotipy.Spotify(
