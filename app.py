@@ -1,6 +1,7 @@
 import spotipy
 from dotenv import dotenv_values
 import openai
+import json
 
 config = dotenv_values(".env")
 
@@ -47,8 +48,11 @@ def get_playlist(prompt, count=8):
     )
 
     playlist = json.loads(["choices"][0]["message"]["content"])
-    print(playlist)
+    return playlist
 
+
+songs = get_playlist("epic songs", 4)
+print(songs)
 
 sp = spotipy.Spotify(
     auth_manager=spotipy.SpotifyOAuth(
@@ -60,12 +64,14 @@ sp = spotipy.Spotify(
 )
 
 current_user = sp.current_user()
+
 assert current_user is not None
-search_results = sp.search(q="Uptown Funk", type="track", limit=10)
-tracks = search_results["tracks"]["items"][0]["id"]
 
-created_playlist = sp.user_playlist_create(
-    current_user["id"], public=False, name="TESTIN PLAYLIST"
-)
+# search_results = sp.search(q="Uptown Funk", type="track", limit=10)
+# tracks = search_results["tracks"]["items"][0]["id"]
 
-sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], tracks)
+# created_playlist = sp.user_playlist_create(
+#     current_user["id"], public=False, name="TESTIN PLAYLIST"
+# )
+
+# sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], tracks)
