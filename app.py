@@ -1,7 +1,52 @@
 import spotipy
 from dotenv import dotenv_values
+import openai
 
 config = dotenv_values(".env")
+
+openai.api_key = config["OPENAI_API_KEY"]
+
+
+example_json = """
+[
+  {"song": "Everybody Hurts", "artist": "R.E.M."},
+  {"song": "Nothing Compares 2 U", "artist": "Sinead O'Connor"},
+  {"song": "Hurt", "artist": "Johnny Cash"},
+  {"song": "Someone Like You", "artist": "Adele"},
+  {"song": "The Sound of Silence", "artist": "Simon & Garfunkel"},
+  {"song": "Yesterday", "artist": "The Beatles"},
+  {"song": "Tears In Heaven", "artist": "Eric Clapton"},
+  {"song": "Everybody's Got to Learn Sometime", "artist": "Beck"},
+  {"song": "I Will Remember You", "artist": "Sarah McLachlan"},
+  {"song": "My Heart Will Go On", "artist": "Celine Dion"}
+]
+"""
+
+messages = [
+    {
+        "role": "system",
+        "content": """You are a helpful playlist generating assistant.
+    You should generate a list of songs and their artists according to a text prompt.
+    Ypu should return a JSON array, where each element follows this format: {"song": <song_title>, "artist": <artist_name>}
+    """,
+    },
+    {
+        "role": "user",
+        "content": "Generate a playlist of songs based on this prompt: super super sad songs",
+    },
+    {"role": "assistant", "content": example_json},
+    {
+        "role": "user",
+        "content": "Generate a playlist of songs based on this prompt: high energy exciting dance songs",
+    },
+]
+
+res = openai.ChatCompletion.create(
+    messages=messages, model="gpt-3.5-turbo", max_tokens=400
+)
+
+playlist = json.loads(["choices"][0]["message"]["content"])
+print(playlist)
 
 
 sp = spotipy.Spotify(
