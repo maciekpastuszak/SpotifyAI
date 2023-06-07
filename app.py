@@ -2,10 +2,16 @@ import spotipy
 from dotenv import dotenv_values
 import openai
 import json
+import argparse
 
 config = dotenv_values(".env")
 
 openai.api_key = config["OPENAI_API_KEY"]
+
+parser = argparse.ArgumentParser(description="Simple command line song utility")
+parser.add_argument("-p", type=str, help="The prompt to describe the playlist")
+
+args = parser.parse_args()
 
 
 def get_playlist(prompt, count=8):
