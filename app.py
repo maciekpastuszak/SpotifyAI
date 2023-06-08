@@ -157,5 +157,8 @@ def add_songs_to_spotify(playlist_prompt, playlist):
         name=f"{playlist_prompt} ({datetime.datetime.now().strftime('%c')})",
     )
 
+    sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], track_uris)
 
-sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], track_ids)
+    print("\n")
+    print(f"Created playlist: {created_playlist['name']}")
+    print(created_playlist["external_urls"]["spotify"])
