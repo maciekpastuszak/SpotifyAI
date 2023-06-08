@@ -56,11 +56,6 @@ def get_playlist(prompt, count=8):
     {"song": "Hurt", "artist": "Johnny Cash"},
     {"song": "Someone Like You", "artist": "Adele"},
     {"song": "The Sound of Silence", "artist": "Simon & Garfunkel"},
-    {"song": "Yesterday", "artist": "The Beatles"},
-    {"song": "Tears In Heaven", "artist": "Eric Clapton"},
-    {"song": "Everybody's Got to Learn Sometime", "artist": "Beck"},
-    {"song": "I Will Remember You", "artist": "Sarah McLachlan"},
-    {"song": "My Heart Will Go On", "artist": "Celine Dion"}
     ]
     """
 
