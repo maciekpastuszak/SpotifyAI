@@ -162,3 +162,7 @@ def add_songs_to_spotify(playlist_prompt, playlist):
     print("\n")
     print(f"Created playlist: {created_playlist['name']}")
     print(created_playlist["external_urls"]["spotify"])
+
+
+if __name__ == "__main__":
+    main()
