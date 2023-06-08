@@ -82,7 +82,7 @@ def get_playlist(prompt, count=8):
         messages=messages, model="gpt-4", max_tokens=400
     )
 
-    playlist = json.loads(res["choices"][0]["message"]["content"])
+    playlist = json.loads(response["choices"][0]["message"]["content"])
     return playlist
 
 
