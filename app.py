@@ -107,17 +107,16 @@ def add_songs_to_spotify(playlist_prompt, playlist):
     # Spotipy Documentation
     # https://spotipy.readthedocs.io/en/2.22.1/#getting-started
 
-
-sp = spotipy.Spotify(
-    auth_manager=spotipy.SpotifyOAuth(
-        client_id=config["SPOTIFY_CLIENT_ID"],
-        client_secret=config["SPOTIFY_CLIENT_SECRET"],
-        redirect_uri="http://localhost:9999",
-        scope="playlist-modify-private",
+    sp = spotipy.Spotify(
+        auth_manager=spotipy.SpotifyOAuth(
+            client_id=spotipy_client_id,
+            client_secret=spotipy_client_secret,
+            redirect_uri=spotipy_redirect_url,
+            scope="playlist-modify-private",
+        )
     )
-)
+    current_user = sp.current_user()
 
-current_user = sp.current_user()
 
 track_ids = []
 assert current_user is not None
