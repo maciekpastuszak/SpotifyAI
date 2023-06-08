@@ -11,19 +11,41 @@ from dotenv import load_dotenv
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-config = dotenv_values(".env")
 
-openai.api_key = config["OPENAI_API_KEY"]
+def main():
+    parser = argparse.ArgumentParser(description="Simple command line utility")
+    parser.add_argument("-p", type=str, help="The prompt to describing the playlist.")
+    parser.add_argument(
+        "-n", type=int, default="12", help="The number of songs to be added."
+    )
+    parser.add_argument(
+        "-envfile",
+        type=str,
+        default=".env",
+        required=False,
+        help='A dotenv file with your environment variables: "SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "OPENAI_API_KEY"',
+    )
 
-parser = argparse.ArgumentParser(description="Simple command line song utility")
-parser.add_argument(
-    "-p", type=str, default="my songs", help="The prompt to describe the playlist"
-)
-parser.add_argument(
-    "-n", type=int, default=8, help="The number of songs to add to the playlist"
-)
+    args = parser.parse_args()
+    load_dotenv(args.envfile)
+    if any(
+        [
+            x not in os.environ
+            for x in ("SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "OPENAI_API_KEY")
+        ]
+    ):
+        raise ValueError(
+            "Error: missing environment variables. Please check your env file."
+        )
+    if args.n not in range(1, 50):
+        raise ValueError("Error: n should be between 0 and 50")
 
-args = parser.parse_args()
+    openai.api_key = os.environ["OPENAI_API_KEY"]
+
+    playlist_prompt = args.p
+    count = args.n
+    playlist = get_playlist(playlist_prompt, count)
+    add_songs_to_spotify(playlist_prompt, playlist)
 
 
 def get_playlist(prompt, count=8):
