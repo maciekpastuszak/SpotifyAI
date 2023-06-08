@@ -1,8 +1,15 @@
-import spotipy
-from dotenv import dotenv_values
-import openai
-import json
 import argparse
+import datetime
+import logging
+import os
+import json
+
+import openai
+import spotipy
+from dotenv import load_dotenv
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 config = dotenv_values(".env")
 
