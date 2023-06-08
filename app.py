@@ -78,8 +78,8 @@ def get_playlist(prompt, count=8):
         },
     ]
 
-    res = openai.ChatCompletion.create(
-        messages=messages, model="gpt-3.5-turbo", max_tokens=400
+    response = openai.ChatCompletion.create(
+        messages=messages, model="gpt-4", max_tokens=400
     )
 
     playlist = json.loads(res["choices"][0]["message"]["content"])
