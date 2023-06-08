@@ -86,9 +86,27 @@ def get_playlist(prompt, count=8):
     return playlist
 
 
-playlist = get_playlist(args.p, args.n)
+def add_songs_to_spotify(playlist_prompt, playlist):
+    # Sign up as a developer and register your app at https://developer.spotify.com/dashboard/applications
 
-print(playlist)
+    # Step 1. Create an Application.
+
+    # Step 2. Copy your Client ID and Client Secret.
+    spotipy_client_id = os.environ[
+        "SPOTIFY_CLIENT_ID"
+    ]  # Use your Spotify API's keypair's Client ID
+    spotipy_client_secret = os.environ[
+        "SPOTIFY_CLIENT_SECRET"
+    ]  # Use your Spotify API's keypair's Client Secret
+
+    # Step 3. Click `Edit Settings`, add `http://localhost:9999` as as a "Redirect URI"
+    spotipy_redirect_url = "http://localhost:9999"  # Your browser will return page not found at this step. We'll grab the URL and paste back in to our console
+
+    # Step 4. Click `Users and Access`. Add your Spotify account to the list of users (identified by your email address)
+
+    # Spotipy Documentation
+    # https://spotipy.readthedocs.io/en/2.22.1/#getting-started
+
 
 sp = spotipy.Spotify(
     auth_manager=spotipy.SpotifyOAuth(
