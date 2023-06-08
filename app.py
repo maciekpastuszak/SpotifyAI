@@ -117,18 +117,45 @@ def add_songs_to_spotify(playlist_prompt, playlist):
     )
     current_user = sp.current_user()
 
+    assert current_user is not None
 
-track_ids = []
-assert current_user is not None
+    track_uris = []
 
-for item in playlist:
-    artist, song = item["artist"], item["song"]
-    query = f"{song} {artist}"
-    search_results = sp.search(q=query, type="track", limit=10)
-    track_ids.append(search_results["tracks"]["items"][0]["id"])
+    for item in playlist:
+        artist, song = item["artist"], item["song"]
+        # https://developer.spotify.com/documentation/web-api/reference/#/operations/search
 
-created_playlist = sp.user_playlist_create(
-    current_user["id"], public=False, name=args.p
-)
+        advanced_query = f"artist:({artist}) track:({song})"
+        basic_query = f"{song} {artist}"
+
+        for query in [advanced_query, basic_query]:
+            log.debug(f"Searching for query: {query}")
+            search_results = sp.search(
+                q=query, limit=10, type="track"
+            )  # , market=market)
+
+            if (
+                not search_results["tracks"]["items"]
+                or search_results["tracks"]["items"][0]["popularity"] < 20
+            ):
+                continue
+            else:
+                good_guess = search_results["tracks"]["items"][0]
+                print(f"Found: {good_guess['name']} [{good_guess['id']}]")
+                # print(f"FOUND USING QUERY: {query}")
+                track_uris.append(good_guess["id"])
+                break
+
+        else:
+            print(
+                f"Queries {advanced_query} and {basic_query} returned no good results. Skipping."
+            )
+
+    created_playlist = sp.user_playlist_create(
+        current_user["id"],
+        public=False,
+        name=f"{playlist_prompt} ({datetime.datetime.now().strftime('%c')})",
+    )
+
 
 sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], track_ids)
