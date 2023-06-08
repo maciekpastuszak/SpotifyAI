@@ -9,7 +9,9 @@ config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
 
 parser = argparse.ArgumentParser(description="Simple command line song utility")
-parser.add_argument("-p", type=str, help="The prompt to describe the playlist")
+parser.add_argument(
+    "-p", type=str, default="my songs", help="The prompt to describe the playlist"
+)
 parser.add_argument(
     "-n", type=int, default=8, help="The number of songs to add to the playlist"
 )
@@ -48,7 +50,7 @@ def get_playlist(prompt, count=8):
         {"role": "assistant", "content": example_json},
         {
             "role": "user",
-            "content": "Generate a playlist of songs based on this prompt: high energy exciting dance songs",
+            "content": "Generate a playlist of {count} songs based on this prompt: {prompt}",
         },
     ]
 
@@ -61,6 +63,7 @@ def get_playlist(prompt, count=8):
 
 
 playlist = get_playlist(args.p, args.n)
+
 print(playlist)
 
 sp = spotipy.Spotify(
@@ -84,7 +87,7 @@ for item in playlist:
     track_ids.append(search_results["tracks"]["items"][0]["id"])
 
 created_playlist = sp.user_playlist_create(
-    current_user["id"], public=False, name="TESTIN PLAYLIST"
+    current_user["id"], public=False, name=args.p
 )
 
 sp.user_playlist_add_tracks(current_user["id"], created_playlist["id"], track_ids)
